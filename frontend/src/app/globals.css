@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Tablero perforado de ferretería: es el motivo visual de la marca */
+.pegboard { background-image: radial-gradient(#22313f38 2px, transparent 2.6px); background-size: 26px 26px; }
+:focus-visible { outline: 3px solid #ff6a13; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

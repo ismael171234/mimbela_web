@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PENDING_WHATSAPP
+  PREPARING
+  COMPLETED
+  CANCELLED
+}
+enum Channel {
+  ONLINE
+  WHATSAPP
+}
+enum Role {
+  ADMIN
+  STAFF
+}
+model Category {
+  id       Int       @id @default(autoincrement())
+  slug     String    @unique
+  name     String
+  products Product[]
+}
+model Product {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  brand       String      @default("")
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
+  price       Decimal     @db.Decimal(10, 2)
+  oldPrice    Decimal?    @db.Decimal(10, 2)
+  stock       Int         @default(0)
+  description String      @default("")
+  specs       Json        @default("{}")
+  images      String[]
+  active      Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       OrderItem[]
+  @@index([categoryId])
+}
+model Order {
+  id            String      @id @default(cuid())
+  code          String      @unique
+  customerName  String
+  customerPhone String
+  customerEmail String
+  total         Decimal     @db.Decimal(10, 2)
+  status        OrderStatus
+  channel       Channel
+  paymentRef    String?
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+}
+model OrderItem {
+  id            Int     @id @default(autoincrement())
+  orderId       String
+  order         Order   @relation(fields: [orderId], references: [id])
+  productId     String
+  product       Product @relation(fields: [productId], references: [id])
+  nameSnapshot  String
+  priceSnapshot Decimal @db.Decimal(10, 2)
+  qty           Int
+}
+model Quote {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String?
+  message   String
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+}
+model AdminUser {
+  id           Int    @id @default(autoincrement())
+  email        String @unique
+  passwordHash String
+  role         Role   @default(ADMIN)
+}
