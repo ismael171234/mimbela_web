@@ -1,7 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* Tablero perforado de ferretería: es el motivo visual de la marca */
-.pegboard { background-image: radial-gradient(#22313f38 2px, transparent 2.6px); background-size: 26px 26px; }
-:focus-visible { outline: 3px solid #ff6a13; outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+html { scroll-behavior: smooth; }
+body { text-rendering: optimizeLegibility; }
+h1, h2, h3 { text-wrap: balance; }
+::selection { background: #ff5c00; color: #0e1419; }
+.pegboard { background-image: radial-gradient(#1b2a3838 2px, transparent 2.6px); background-size: 26px 26px; }
+.pegboard-dark { background-image: radial-gradient(#ffffff1f 2px, transparent 2.6px); background-size: 26px 26px; }
+:focus-visible { outline: 3px solid #ff5c00; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
